@@ -13,16 +13,20 @@ export const NewTask = () => {
   const [lists, setLists] = useState([])
   const [title, setTitle] = useState('')
   const [detail, setDetail] = useState('')
+  const [limit, setLimit] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
   const [cookies] = useCookies()
   const history = useHistory()
   const handleTitleChange = (e) => setTitle(e.target.value)
   const handleDetailChange = (e) => setDetail(e.target.value)
+  const handleLimitChange = (e) => setLimit(e.target.value)
   const handleSelectList = (id) => setSelectListId(id)
+
   const onCreateTask = () => {
     const data = {
       title: title,
       detail: detail,
+      limit: new Date(limit).toISOString(),  // limitをISO 8601形式に変換
       done: false,
     }
 
@@ -36,7 +40,7 @@ export const NewTask = () => {
         history.push('/')
       })
       .catch((err) => {
-        setErrorMessage(`タスクの作成に失敗しました。${err}`)
+        setErrorMessage(`タスクの作成に失敗しました。${err.response?.data?.ErrorMessageJP || err.message}`)
       })
   }
 
@@ -90,6 +94,14 @@ export const NewTask = () => {
             type="text"
             onChange={handleDetailChange}
             className="new-task-detail"
+          />
+          <br />
+          <label>期限</label>
+          <br />
+          <input
+            type="datetime-local"
+            onChange={handleLimitChange}
+            className="new-task-limit"
           />
           <br />
           <button
