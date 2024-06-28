@@ -1,33 +1,44 @@
 .taskList {
   margin: 50px auto;
   list-style: none;
-  width: 1000px;
+  width: 90%;
+  max-width: 1000px;
 }
 
 .list-header {
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .list-menu {
   text-align: right;
+  margin-top: 10px;
 }
 
 .list-tab {
   list-style: none;
   display: flex;
   overflow-x: auto;
+  margin-bottom: 15px;
 }
 
 .list-tab-item {
   flex-shrink: 0;
   width: 100px;
-  padding: 0 25px;
+  padding: 0 15px;
   text-overflow: normal;
   margin-right: 5px;
   border: solid 1px #242f9b;
+  display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
+}
+
+.list-tab-item:focus {
+  outline: none;
+  border: solid 1px #ff9900;
 }
 
 .active {
@@ -42,6 +53,7 @@
 .tasks-header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .task-item {
@@ -51,6 +63,7 @@
   padding-left: 25px;
   font-size: large;
   border: solid 1px #ffffff;
+  margin-bottom: 10px;
 }
 
 .task-item-link {
@@ -72,4 +85,71 @@
 
 .display-select {
   width: 100%;
+}
+
+/* タブレット */
+@media (max-width: 768px) {
+  .taskList {
+    width: 95%;
+  }
+
+  .list-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .list-menu {
+    text-align: left;
+    margin-top: 10px;
+  }
+
+  .list-tab-item {
+    width: 80px;
+    padding: 0 10px;
+  }
+
+  .task-item {
+    font-size: medium;
+  }
+}
+
+/* スマホ */
+@media (max-width: 480px) {
+  .taskList {
+    width: 95%;
+  }
+
+  .list-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .list-menu {
+    text-align: left;
+    margin-top: 10px;
+  }
+
+  .list-tab-item {
+    width: 70px;
+    padding: 0 5px;
+  }
+
+  .tasks-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .task-item {
+    font-size: small;
+    padding-left: 10px;
+  }
+
+  .display-select-wrapper {
+    width: 100%;
+    margin: 10px 0;
+  }
+
+  .display-select {
+    width: 100%;
+  }
 }

@@ -26,7 +26,7 @@ export const NewTask = () => {
     const data = {
       title: title,
       detail: detail,
-      limit: new Date(limit).toISOString(),  // limitをISO 8601形式に変換
+      limit: new Date(limit).toISOString(), // limitをISO 8601形式に変換
       done: false,
     }
 
@@ -40,7 +40,9 @@ export const NewTask = () => {
         history.push('/')
       })
       .catch((err) => {
-        setErrorMessage(`タスクの作成に失敗しました。${err.response?.data?.ErrorMessageJP || err.message}`)
+        setErrorMessage(
+          `タスクの作成に失敗しました。${err.response?.data?.ErrorMessageJP || err.message}`
+        )
       })
   }
 

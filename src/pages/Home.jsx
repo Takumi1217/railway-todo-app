@@ -16,6 +16,7 @@ export const Home = () => {
   const [errorMessage, setErrorMessage] = useState('')
   const [cookies] = useCookies()
   const handleIsDoneDisplayChange = (e) => setIsDoneDisplay(e.target.value)
+
   useEffect(() => {
     axios
       .get(`${url}/lists`, {
@@ -65,6 +66,17 @@ export const Home = () => {
         setErrorMessage(`タスクの取得に失敗しました。${err}`)
       })
   }
+
+  const handleKeyDown = (e, index) => {
+    if (e.key === 'ArrowLeft') {
+      const prevIndex = index > 0 ? index - 1 : lists.length - 1
+      handleSelectList(lists[prevIndex].id)
+    } else if (e.key === 'ArrowRight') {
+      const nextIndex = index < lists.length - 1 ? index + 1 : 0
+      handleSelectList(lists[nextIndex].id)
+    }
+  }
+
   return (
     <div>
       <Header />
@@ -84,14 +96,18 @@ export const Home = () => {
               </p>
             </div>
           </div>
-          <ul className="list-tab">
-            {lists.map((list, key) => {
+          <ul className="list-tab" role="tablist">
+            {lists.map((list, index) => {
               const isActive = list.id === selectListId
               return (
                 <li
-                  key={key}
+                  key={index}
                   className={`list-tab-item ${isActive ? 'active' : ''}`}
+                  role="tab"
+                  aria-selected={isActive}
+                  tabIndex={isActive ? 0 : -1}
                   onClick={() => handleSelectList(list.id)}
+                  onKeyDown={(e) => handleKeyDown(e, index)}
                 >
                   {list.title}
                 </li>
@@ -127,7 +143,9 @@ export const Home = () => {
 const Tasks = ({ tasks, selectListId, isDoneDisplay }) => {
   if (tasks === null) return <></>
 
-  const filteredTasks = tasks.filter((task) => task.done === (isDoneDisplay === 'done'))
+  const filteredTasks = tasks.filter(
+    (task) => task.done === (isDoneDisplay === 'done')
+  )
 
   return (
     <ul>
@@ -136,7 +154,9 @@ const Tasks = ({ tasks, selectListId, isDoneDisplay }) => {
         const now = new Date()
         const remainingTime = Math.max(0, deadline - now)
         const daysRemaining = Math.floor(remainingTime / (1000 * 60 * 60 * 24))
-        const hoursRemaining = Math.floor((remainingTime / (1000 * 60 * 60)) % 24)
+        const hoursRemaining = Math.floor(
+          (remainingTime / (1000 * 60 * 60)) % 24
+        )
         const minutesRemaining = Math.floor((remainingTime / 1000 / 60) % 60)
 
         return (
