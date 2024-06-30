@@ -1,9 +1,9 @@
-import globals from "globals";
-import pluginReact from "eslint-plugin-react";
+import globals from 'globals'
+import pluginReact from 'eslint-plugin-react'
 
 export default [
   {
-    files: ["**/*.{js,mjs,cjs,jsx}"],
+    files: ['**/*.{js,mjs,cjs,jsx}'],
     languageOptions: {
       parserOptions: {
         ecmaFeatures: {
@@ -12,7 +12,7 @@ export default [
       },
       globals: {
         ...globals.browser,
-        process: 'readonly',  // `process`を読み取り専用で追加
+        process: 'readonly', // `process`を読み取り専用で追加
       },
     },
     plugins: {
@@ -20,16 +20,16 @@ export default [
     },
     settings: {
       react: {
-        version: 'detect',  // Reactのバージョンを自動的に検出
+        version: 'detect', // Reactのバージョンを自動的に検出
       },
     },
     rules: {
-      "no-unused-vars": ["off"],  // 無効化
-      "no-undef": ["error"],
-      "no-console": ["off"],
-      "no-debugger": ["warn"],
-      "react/prop-types": ["off"],  // 無効化
-      "react/react-in-jsx-scope": ["error"],
-    },    
+      'no-unused-vars': ['warn'],
+      'no-undef': ['error'],
+      'no-console': ['off'],
+      'no-debugger': ['warn'],
+      'react/prop-types': ['off'], // 無効化
+      'react/react-in-jsx-scope': ['error'],
+    },
   },
-];
+]
