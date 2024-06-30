@@ -1,7 +1,5 @@
 import globals from "globals";
-import pluginJs from "@eslint/js";
 import pluginReact from "eslint-plugin-react";
-import pluginReactConfig from "eslint-plugin-react/configs/recommended.js";
 
 export default [
   {
@@ -26,15 +24,12 @@ export default [
       },
     },
     rules: {
-      // pluginJs.configs.recommendedの内容
-      "no-unused-vars": ["warn"],
+      "no-unused-vars": ["off"],  // 無効化
       "no-undef": ["error"],
-      "no-console": ["warn"],
+      "no-console": ["off"],
       "no-debugger": ["warn"],
-      // pluginReactConfigの内容
-      "react/prop-types": ["off"],
+      "react/prop-types": ["off"],  // 無効化
       "react/react-in-jsx-scope": ["error"],
-      // 追加のカスタムルールをここに追加できます
-    },
+    },    
   },
 ];
