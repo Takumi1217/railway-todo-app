@@ -171,6 +171,12 @@ const Tasks = ({ tasks, selectListId, isDoneDisplay }) => {
         )
         const minutesRemaining = Math.floor((remainingTime / 1000 / 60) % 60)
 
+        // YYYY-MM-DDTHH:MM:SSZ形式に変換する関数
+        const formatDate = (date) => {
+          const pad = (num) => num.toString().padStart(2, '0')
+          return `${date.getUTCFullYear()}-${pad(date.getUTCMonth() + 1)}-${pad(date.getUTCDate())}T${pad(date.getUTCHours())}:${pad(date.getUTCMinutes())}:${pad(date.getUTCSeconds())}Z`
+        }
+
         return (
           <li key={key} className="task-item">
             <Link
@@ -179,7 +185,7 @@ const Tasks = ({ tasks, selectListId, isDoneDisplay }) => {
             >
               {task.title}
               <br />
-              期限: {deadline.toLocaleString('ja-JP', { timeZone: 'UTC' })} {/* UTCタイムゾーンを指定 */}
+              期限: {formatDate(deadlineUTC)}
               <br />
               残り: {daysRemaining}日 {hoursRemaining}時間 {minutesRemaining}分
               <br />
