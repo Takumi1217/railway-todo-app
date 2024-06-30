@@ -1,5 +1,6 @@
 // App.js
 
+import React from 'react';
 import './App.scss'
 import { Router } from './routes/Router'
 
