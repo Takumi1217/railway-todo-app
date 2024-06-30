@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom'  // useHistory の代わりに useNavigate を使用
 import { Home } from '../pages/Home'
 import { NotFound } from '../pages/NotFound'
 import { SignIn } from '../pages/SignIn'
@@ -18,23 +18,23 @@ export const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
-        {/* サインインしていないときは、サインインページとサインアップページだけにアクセスできるようにする */}
-        {!auth ? (
-          <>
-            <Route path="/signin" element={<SignIn />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="*" element={<Navigate to="/signin" />} />
-          </>
-        ) : (
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/signup" element={<SignUp />} />
+        {auth ? (
           <>
             <Route path="/" element={<Home />} />
             <Route path="/task/new" element={<NewTask />} />
             <Route path="/list/new" element={<NewList />} />
-            <Route path="/lists/:listId/tasks/:taskId" element={<EditTask />} />
+            <Route
+              path="/lists/:listId/tasks/:taskId"
+              element={<EditTask />}
+            />
             <Route path="/lists/:listId/edit" element={<EditList />} />
-            <Route path="*" element={<NotFound />} />
           </>
+        ) : (
+          <Route path="*" element={<Navigate to="/signin" />} />
         )}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   )
