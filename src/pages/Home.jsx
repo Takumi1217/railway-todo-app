@@ -1,23 +1,23 @@
 // Home.jsx
 
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useCookies } from 'react-cookie';
-import axios from 'axios';
-import { Header } from '../components/Header';
-import { url } from '../const';
-import './home.scss';
+import React, { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { useCookies } from 'react-cookie'
+import axios from 'axios'
+import { Header } from '../components/Header'
+import { url } from '../const'
+import './home.scss'
 
 export const Home = () => {
-  const [isDoneDisplay, setIsDoneDisplay] = useState('todo'); // todo->未完了 done->完了
-  const [lists, setLists] = useState([]);
-  const [selectListId, setSelectListId] = useState();
-  const [tasks, setTasks] = useState([]);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [cookies] = useCookies();
-  const navigate = useNavigate();
+  const [isDoneDisplay, setIsDoneDisplay] = useState('todo') // todo->未完了 done->完了
+  const [lists, setLists] = useState([])
+  const [selectListId, setSelectListId] = useState()
+  const [tasks, setTasks] = useState([])
+  const [errorMessage, setErrorMessage] = useState('')
+  const [cookies] = useCookies()
+  const navigate = useNavigate()
 
-  const handleIsDoneDisplayChange = (e) => setIsDoneDisplay(e.target.value);
+  const handleIsDoneDisplayChange = (e) => setIsDoneDisplay(e.target.value)
 
   useEffect(() => {
     axios
@@ -27,17 +27,17 @@ export const Home = () => {
         },
       })
       .then((res) => {
-        setLists(res.data);
+        setLists(res.data)
       })
       .catch((err) => {
-        setErrorMessage(`リストの取得に失敗しました。${err}`);
-      });
-  }, [cookies.token]);
+        setErrorMessage(`リストの取得に失敗しました。${err}`)
+      })
+  }, [cookies.token])
 
   useEffect(() => {
-    const listId = lists[0]?.id;
+    const listId = lists[0]?.id
     if (typeof listId !== 'undefined') {
-      setSelectListId(listId);
+      setSelectListId(listId)
       axios
         .get(`${url}/lists/${listId}/tasks`, {
           headers: {
@@ -45,16 +45,16 @@ export const Home = () => {
           },
         })
         .then((res) => {
-          setTasks(res.data.tasks);
+          setTasks(res.data.tasks)
         })
         .catch((err) => {
-          setErrorMessage(`タスクの取得に失敗しました。${err}`);
-        });
+          setErrorMessage(`タスクの取得に失敗しました。${err}`)
+        })
     }
-  }, [lists, cookies.token]);
+  }, [lists, cookies.token])
 
   const handleSelectList = (id) => {
-    setSelectListId(id);
+    setSelectListId(id)
     axios
       .get(`${url}/lists/${id}/tasks`, {
         headers: {
@@ -62,22 +62,22 @@ export const Home = () => {
         },
       })
       .then((res) => {
-        setTasks(res.data.tasks);
+        setTasks(res.data.tasks)
       })
       .catch((err) => {
-        setErrorMessage(`タスクの取得に失敗しました。${err}`);
-      });
-  };
+        setErrorMessage(`タスクの取得に失敗しました。${err}`)
+      })
+  }
 
   const handleKeyDown = (e, index) => {
     if (e.key === 'ArrowLeft') {
-      const prevIndex = index > 0 ? index - 1 : lists.length - 1;
-      handleSelectList(lists[prevIndex].id);
+      const prevIndex = index > 0 ? index - 1 : lists.length - 1
+      handleSelectList(lists[prevIndex].id)
     } else if (e.key === 'ArrowRight') {
-      const nextIndex = index < lists.length - 1 ? index + 1 : 0;
-      handleSelectList(lists[nextIndex].id);
+      const nextIndex = index < lists.length - 1 ? index + 1 : 0
+      handleSelectList(lists[nextIndex].id)
     }
-  };
+  }
 
   return (
     <div>
@@ -100,7 +100,7 @@ export const Home = () => {
           </div>
           <ul className="list-tab" role="tablist">
             {lists.map((list, index) => {
-              const isActive = list.id === selectListId;
+              const isActive = list.id === selectListId
               return (
                 <li
                   key={index}
@@ -113,7 +113,7 @@ export const Home = () => {
                 >
                   {list.title}
                 </li>
-              );
+              )
             })}
           </ul>
           <div className="tasks">
@@ -139,21 +139,21 @@ export const Home = () => {
         </div>
       </main>
     </div>
-  );
-};
+  )
+}
 
 const Tasks = ({ tasks, selectListId, isDoneDisplay }) => {
-  if (tasks === null) return <></>;
+  if (tasks === null) return <></>
 
   const filteredTasks = tasks.filter(
     (task) => task.done === (isDoneDisplay === 'done')
-  );
+  )
 
   return (
     <ul>
       {filteredTasks.map((task, key) => {
-        const deadline = new Date(task.limit);
-        const now = new Date();
+        const deadline = new Date(task.limit)
+        const now = new Date()
         const nowUTC = new Date(
           Date.UTC(
             now.getFullYear(),
@@ -163,7 +163,7 @@ const Tasks = ({ tasks, selectListId, isDoneDisplay }) => {
             now.getMinutes(),
             now.getSeconds()
           )
-        );
+        )
         const deadlineUTC = new Date(
           Date.UTC(
             deadline.getUTCFullYear(),
@@ -173,19 +173,19 @@ const Tasks = ({ tasks, selectListId, isDoneDisplay }) => {
             deadline.getUTCMinutes(),
             deadline.getUTCSeconds()
           )
-        );
+        )
 
-        const remainingTime = deadlineUTC.getTime() - nowUTC.getTime();
-        const daysRemaining = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
+        const remainingTime = deadlineUTC.getTime() - nowUTC.getTime()
+        const daysRemaining = Math.floor(remainingTime / (1000 * 60 * 60 * 24))
         const hoursRemaining = Math.floor(
           (remainingTime / (1000 * 60 * 60)) % 24
-        );
-        const minutesRemaining = Math.floor((remainingTime / 1000 / 60) % 60);
+        )
+        const minutesRemaining = Math.floor((remainingTime / 1000 / 60) % 60)
 
         const formatDate = (date) => {
-          const pad = (num) => num.toString().padStart(2, '0');
-          return `${date.getUTCFullYear()}-${pad(date.getUTCMonth() + 1)}-${pad(date.getUTCDate())}T${pad(date.getUTCHours())}:${pad(date.getUTCMinutes())}:${pad(date.getUTCSeconds())}Z`;
-        };
+          const pad = (num) => num.toString().padStart(2, '0')
+          return `${date.getUTCFullYear()}-${pad(date.getUTCMonth() + 1)}-${pad(date.getUTCDate())}T${pad(date.getUTCHours())}:${pad(date.getUTCMinutes())}:${pad(date.getUTCSeconds())}Z`
+        }
 
         return (
           <li key={key} className="task-item">
@@ -202,8 +202,8 @@ const Tasks = ({ tasks, selectListId, isDoneDisplay }) => {
               {task.done ? '完了' : '未完了'}
             </Link>
           </li>
-        );
+        )
       })}
     </ul>
-  );
-};
+  )
+}

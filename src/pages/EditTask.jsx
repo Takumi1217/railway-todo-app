@@ -1,27 +1,27 @@
 // EditTask.jsx
 
-import React, { useEffect, useState } from 'react';
-import { Header } from '../components/Header';
-import axios from 'axios';
-import { useCookies } from 'react-cookie';
-import { url } from '../const';
-import { useNavigate, useParams } from 'react-router-dom';
-import './editTask.scss';
+import React, { useEffect, useState } from 'react'
+import { Header } from '../components/Header'
+import axios from 'axios'
+import { useCookies } from 'react-cookie'
+import { url } from '../const'
+import { useNavigate, useParams } from 'react-router-dom'
+import './editTask.scss'
 
 export const EditTask = () => {
-  const navigate = useNavigate();
-  const { listId, taskId } = useParams();
-  const [cookies] = useCookies();
-  const [title, setTitle] = useState('');
-  const [detail, setDetail] = useState('');
-  const [limit, setLimit] = useState('');
-  const [isDone, setIsDone] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate()
+  const { listId, taskId } = useParams()
+  const [cookies] = useCookies()
+  const [title, setTitle] = useState('')
+  const [detail, setDetail] = useState('')
+  const [limit, setLimit] = useState('')
+  const [isDone, setIsDone] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
 
-  const handleTitleChange = (e) => setTitle(e.target.value);
-  const handleDetailChange = (e) => setDetail(e.target.value);
-  const handleLimitChange = (e) => setLimit(e.target.value);
-  const handleIsDoneChange = (e) => setIsDone(e.target.value === 'done');
+  const handleTitleChange = (e) => setTitle(e.target.value)
+  const handleDetailChange = (e) => setDetail(e.target.value)
+  const handleLimitChange = (e) => setLimit(e.target.value)
+  const handleIsDoneChange = (e) => setIsDone(e.target.value === 'done')
 
   const onUpdateTask = () => {
     const data = {
@@ -29,7 +29,7 @@ export const EditTask = () => {
       detail: detail,
       limit: new Date(`${limit}:00Z`).toISOString(), // `:00Z`を追加してUTC時間を指定
       done: isDone,
-    };
+    }
 
     axios
       .put(`${url}/lists/${listId}/tasks/${taskId}`, data, {
@@ -38,15 +38,15 @@ export const EditTask = () => {
         },
       })
       .then((res) => {
-        console.log(res.data);
-        navigate('/');
+        console.log(res.data)
+        navigate('/')
       })
       .catch((err) => {
         setErrorMessage(
           `更新に失敗しました。${err.response?.data?.ErrorMessageJP || err.message}`
-        );
-      });
-  };
+        )
+      })
+  }
 
   const onDeleteTask = () => {
     axios
@@ -56,14 +56,14 @@ export const EditTask = () => {
         },
       })
       .then(() => {
-        navigate('/');
+        navigate('/')
       })
       .catch((err) => {
         setErrorMessage(
           `削除に失敗しました。${err.response?.data?.ErrorMessageJP || err.message}`
-        );
-      });
-  };
+        )
+      })
+  }
 
   useEffect(() => {
     axios
@@ -73,18 +73,18 @@ export const EditTask = () => {
         },
       })
       .then((res) => {
-        const task = res.data;
-        setTitle(task.title);
-        setDetail(task.detail);
-        setLimit(new Date(task.limit).toISOString().slice(0, 16)); // 値を適切に設定
-        setIsDone(task.done);
+        const task = res.data
+        setTitle(task.title)
+        setDetail(task.detail)
+        setLimit(new Date(task.limit).toISOString().slice(0, 16)) // 値を適切に設定
+        setIsDone(task.done)
       })
       .catch((err) => {
         setErrorMessage(
           `タスク情報の取得に失敗しました。${err.response?.data?.ErrorMessageJP || err.message}`
-        );
-      });
-  }, [listId, taskId, cookies.token]); // 必要な依存を追加
+        )
+      })
+  }, [listId, taskId, cookies.token]) // 必要な依存を追加
 
   return (
     <div>
@@ -157,5 +157,5 @@ export const EditTask = () => {
         </form>
       </main>
     </div>
-  );
-};
+  )
+}
