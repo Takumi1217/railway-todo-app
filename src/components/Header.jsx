@@ -11,7 +11,7 @@ export const Header = () => {
   const auth = useSelector((state) => state.auth.isSignIn)
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const [cookies, setCookie, removeCookie] = useCookies()
+  const [removeCookie] = useCookies()
 
   const handleSignOut = () => {
     dispatch(signOut())

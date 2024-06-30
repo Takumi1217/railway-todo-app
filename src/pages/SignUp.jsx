@@ -19,7 +19,7 @@ export const SignUp = () => {
   const [name, setName] = useState('')
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessge] = useState()
-  const [cookies, setCookie] = useCookies(['token']) // 'token' の Cookie を使用するように修正
+  const [setCookie] = useCookies(['token']) // 'token' の Cookie を使用するように修正
 
   const handleEmailChange = (e) => setEmail(e.target.value)
   const handleNameChange = (e) => setName(e.target.value)
