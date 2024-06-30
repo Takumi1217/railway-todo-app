@@ -1,12 +1,11 @@
-// Home.jsx
-
 import React, { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
 import axios from 'axios'
 import { Header } from '../components/Header'
 import { url } from '../const'
 import './home.scss'
+import PropTypes from 'prop-types'  // 追加
 
 export const Home = () => {
   const [isDoneDisplay, setIsDoneDisplay] = useState('todo') // todo->未完了 done->完了
@@ -15,7 +14,6 @@ export const Home = () => {
   const [tasks, setTasks] = useState([])
   const [errorMessage, setErrorMessage] = useState('')
   const [cookies] = useCookies()
-  const navigate = useNavigate()
 
   const handleIsDoneDisplayChange = (e) => setIsDoneDisplay(e.target.value)
 
@@ -206,4 +204,10 @@ const Tasks = ({ tasks, selectListId, isDoneDisplay }) => {
       })}
     </ul>
   )
+}
+
+Tasks.propTypes = {
+  tasks: PropTypes.array.isRequired,
+  selectListId: PropTypes.string.isRequired,
+  isDoneDisplay: PropTypes.string.isRequired,
 }
