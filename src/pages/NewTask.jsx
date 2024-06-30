@@ -1,35 +1,37 @@
 // NewTask.jsx
 
-import React, { useState, useEffect } from 'react'
-import { useCookies } from 'react-cookie'
-import axios from 'axios'
-import { url } from '../const'
-import { Header } from '../components/Header'
-import './newTask.scss'
-import { useNavigate } from 'react-router-dom'
+import React, { useState, useEffect } from 'react';
+import { useCookies } from 'react-cookie';
+import axios from 'axios';
+import { url } from '../const';
+import { Header } from '../components/Header';
+import './newTask.scss';
+import { useNavigate } from 'react-router-dom';
 
 export const NewTask = () => {
-  const [selectListId, setSelectListId] = useState()
-  const [lists, setLists] = useState([])
-  const [title, setTitle] = useState('')
-  const [detail, setDetail] = useState('')
-  const [limit, setLimit] = useState('')
-  const [errorMessage, setErrorMessage] = useState('')
-  const [cookies] = useCookies()
-  const navigate = useNavigate() // useHistoryからuseNavigateに変更
-  const handleTitleChange = (e) => setTitle(e.target.value)
-  const handleDetailChange = (e) => setDetail(e.target.value)
-  const handleLimitChange = (e) => setLimit(e.target.value)
-  const handleSelectList = (id) => setSelectListId(id)
+  const [selectListId, setSelectListId] = useState();
+  const [lists, setLists] = useState([]);
+  const [title, setTitle] = useState('');
+  const [detail, setDetail] = useState('');
+  const [limit, setLimit] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [cookies] = useCookies();
+  const navigate = useNavigate();
+  const handleTitleChange = (e) => setTitle(e.target.value);
+  const handleDetailChange = (e) => setDetail(e.target.value);
+  const handleLimitChange = (e) => setLimit(e.target.value);
+  const handleSelectList = (id) => setSelectListId(id);
 
   const onCreateTask = () => {
-    // `limit`がローカルの日時であることを想定し、UTCに変換してから送信する
+    const localDateTime = new Date(limit);
+    const utcDateTime = new Date(localDateTime.getTime() - localDateTime.getTimezoneOffset() * 60000).toISOString();
+
     const data = {
       title: title,
       detail: detail,
-      limit: new Date(`${limit}:00`).toISOString(), // `:00`を追加してUTC時間を指定
+      limit: utcDateTime,
       done: false,
-    }
+    };
 
     axios
       .post(`${url}/lists/${selectListId}/tasks`, data, {
@@ -38,14 +40,12 @@ export const NewTask = () => {
         },
       })
       .then(() => {
-        navigate('/') // history.pushからnavigateに変更
+        navigate('/');
       })
       .catch((err) => {
-        setErrorMessage(
-          `タスクの作成に失敗しました。${err.response?.data?.ErrorMessageJP || err.message}`
-        )
-      })
-  }
+        setErrorMessage(`タスクの作成に失敗しました。${err.response?.data?.ErrorMessageJP || err.message}`);
+      });
+  };
 
   useEffect(() => {
     axios
@@ -55,13 +55,13 @@ export const NewTask = () => {
         },
       })
       .then((res) => {
-        setLists(res.data)
-        setSelectListId(res.data[0]?.id)
+        setLists(res.data);
+        setSelectListId(res.data[0]?.id);
       })
       .catch((err) => {
-        setErrorMessage(`リストの取得に失敗しました。${err}`)
-      })
-  }, [cookies.token])
+        setErrorMessage(`リストの取得に失敗しました。${err}`);
+      });
+  }, [cookies.token]);
 
   return (
     <div>
@@ -121,5 +121,5 @@ export const NewTask = () => {
         </form>
       </main>
     </div>
-  )
-}
+  );
+};
