@@ -1,6 +1,8 @@
+// Router.jsx
+
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { Home } from '../pages/Home'
 import { NotFound } from '../pages/NotFound'
 import { SignIn } from '../pages/SignIn'
@@ -15,26 +17,25 @@ export const Router = () => {
 
   return (
     <BrowserRouter>
-      <Switch>
-        <Route exact path="/signin" component={SignIn} />
-        <Route exact path="/signup" component={SignUp} />
-        {auth ? (
+      <Routes>
+        {/* サインインしていないときは、サインインページとサインアップページだけにアクセスできるようにする */}
+        {!auth ? (
           <>
-            <Route exact path="/" component={Home} />
-            <Route exact path="/task/new" component={NewTask} />
-            <Route exact path="/list/new" component={NewList} />
-            <Route
-              exact
-              path="/lists/:listId/tasks/:taskId"
-              component={EditTask}
-            />
-            <Route exact path="/lists/:listId/edit" component={EditList} />
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="*" element={<Navigate to="/signin" />} />
           </>
         ) : (
-          <Redirect to="/signin" />
+          <>
+            <Route path="/" element={<Home />} />
+            <Route path="/task/new" element={<NewTask />} />
+            <Route path="/list/new" element={<NewList />} />
+            <Route path="/lists/:listId/tasks/:taskId" element={<EditTask />} />
+            <Route path="/lists/:listId/edit" element={<EditList />} />
+            <Route path="*" element={<NotFound />} />
+          </>
         )}
-        <Route component={NotFound} />
-      </Switch>
+      </Routes>
     </BrowserRouter>
   )
 }

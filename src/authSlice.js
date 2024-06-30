@@ -1,10 +1,10 @@
+// authSlice.js
+
 import { createSlice } from '@reduxjs/toolkit'
-import { Cookies } from 'react-cookie'
 
-const cookie = new Cookies()
-
+// 初期状態の `isSignIn` を直接設定
 const initialState = {
-  isSignIn: cookie.get('token') !== undefined,
+  isSignIn: false,
 }
 
 export const authSlice = createSlice({
