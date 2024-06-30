@@ -23,10 +23,11 @@ export const NewTask = () => {
   const handleSelectList = (id) => setSelectListId(id)
 
   const onCreateTask = () => {
+    // `limit`がローカルの日時であることを想定し、UTCに変換してから送信する
     const data = {
       title: title,
       detail: detail,
-      limit: new Date(limit).toISOString(), // limitをISO 8601形式に変換
+      limit: new Date(`${limit}:00Z`).toISOString(), // `:00Z`を追加してUTC時間を指定
       done: false,
     }
 

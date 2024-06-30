@@ -150,9 +150,21 @@ const Tasks = ({ tasks, selectListId, isDoneDisplay }) => {
   return (
     <ul>
       {filteredTasks.map((task, key) => {
+        // `deadline`をUTC時間として扱うための修正
         const deadline = new Date(task.limit)
         const now = new Date()
-        const remainingTime = Math.max(0, deadline - now)
+
+        // `now` の時間をUTCに設定
+        const nowUTC = new Date(
+          Date.UTC(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes(), now.getSeconds())
+        )
+
+        // `deadline`の時間をUTCで扱う
+        const deadlineUTC = new Date(
+          Date.UTC(deadline.getUTCFullYear(), deadline.getUTCMonth(), deadline.getUTCDate(), deadline.getUTCHours(), deadline.getUTCMinutes(), deadline.getUTCSeconds())
+        )
+
+        const remainingTime = deadlineUTC.getTime() - nowUTC.getTime()
         const daysRemaining = Math.floor(remainingTime / (1000 * 60 * 60 * 24))
         const hoursRemaining = Math.floor(
           (remainingTime / (1000 * 60 * 60)) % 24
@@ -167,7 +179,7 @@ const Tasks = ({ tasks, selectListId, isDoneDisplay }) => {
             >
               {task.title}
               <br />
-              期限: {task.limit}
+              期限: {deadline.toLocaleString('ja-JP', { timeZone: 'UTC' })} {/* UTCタイムゾーンを指定 */}
               <br />
               残り: {daysRemaining}日 {hoursRemaining}時間 {minutesRemaining}分
               <br />

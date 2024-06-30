@@ -27,7 +27,7 @@ export const EditTask = () => {
     const data = {
       title: title,
       detail: detail,
-      limit: new Date(limit).toISOString(),
+      limit: new Date(`${limit}:00Z`).toISOString(), // `:00Z`を追加してUTC時間を指定
       done: isDone,
     }
 
